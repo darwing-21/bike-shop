@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\ChangePasswordController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::middleware(['auth'])->group(function () {
+    Route::resource('brands', BrandController::class);
     Route::post('/reset_pass', 'App\Http\Controllers\Auth\ChangePasswordController@reset')->name('reset_pass');
-    Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 Auth::routes();
