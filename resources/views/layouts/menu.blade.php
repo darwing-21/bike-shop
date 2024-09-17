@@ -5,4 +5,7 @@
     <a class="nav-link" href="{{ route('brands.index') }}">
         <i class=" fas fa-gamepad"></i><span>Marca</span>
     </a>
+    <a class="nav-link" href="{{ route('products.index') }}">
+        <i class=" fas fa-gamepad"></i><span>Productos</span>
+    </a>
 </li>

@@ -3,7 +3,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h3 class="page__heading">Lista de Marcas</h3>
+            <h3 class="page__heading">Lista de Productos</h3>
         </div>
         <div class="section-body">
             <div class="row">
@@ -17,44 +17,40 @@
                         </div>
                     @endif
 
-                    @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ session('error') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
-
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('brands.create') }}" class="btn btn-primary mb-3">Registrar Nueva Marca</a>
+                            <a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Registrar Nuevo
+                                Producto</a>
 
-                            @if ($brands->isEmpty())
-                                <div class="alert alert-info" role="alert">
-                                    No hay marcas registradas.
-                                </div>
+                            @if ($products->isEmpty())
+                                <div class="alert alert-info">No hay productos registrados.</div>
                             @else
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Nombre de la Marca</th>
-                                                <th>Actualizado</th>
+                                                <th>Nombre</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($brands as $brand)
+                                            @foreach ($products as $product)
                                                 <tr>
-                                                    <td>{{ $brand->name }}</td>
-                                                    <td>{{ $brand->updated_at }}</td>
+                                                    <td>{{ $product->name }}</td>
+                                                    <td>{{ $product->brand->name }}</td>
+                                                    <td>{{ $product->model }}</td>
+                                                    <td>{{ $product->quantity }}</td>
+                                                    <td>${{ $product->price }}</td>
                                                     <td>
-                                                        <a href="{{ route('brands.edit', $brand->id) }}"
+                                                        <a href="{{ route('products.edit', $product->id) }}"
                                                             class="btn btn-warning btn-sm">Editar</a>
                                                         <button type="button" class="btn btn-danger btn-sm"
                                                             data-toggle="modal" data-target="#deleteModal"
-                                                            data-id="{{ $brand->id }}">
+                                                            data-id="{{ $product->id }}">
                                                             Eliminar
                                                         </button>
                                                     </td>
@@ -71,6 +67,7 @@
         </div>
     </section>
 
+
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -82,11 +79,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ¿Estás seguro de que deseas eliminar esta marca?
+                    ¿Estás seguro de que deseas eliminar este producto?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <form id="deleteForm" method="POST" action="{{ route('brands.destroy', $brand->id) }}">
+                    <form id="deleteForm" method="POST" action="{{ route('products.destroy', $product->id) }}">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>
@@ -96,5 +93,5 @@
         </div>
     </div>
 
-   
+
 @endsection

@@ -2,83 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $products = Product::with('brand')->get();
+        return view('components.products.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $brands = Brand::all();
+        return view('components.products.create', compact('brands'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:255',
+            'brand_id' => 'required|exists:brands,id',
+            'model' => 'required|max:255',
+            'quantity' => 'required|integer',
+            'price' => 'required|numeric',
+            'description' => 'nullable',
+        ]);
+
+        Product::create($request->all());
+
+        return redirect()->route('products.index')->with('success', 'Producto creado exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function edit(Product $product)
     {
-        //
+        $brands = Brand::all();
+        return view('components.products.edit', compact('product', 'brands'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:255',
+            'brand_id' => 'required|exists:brands,id',
+            'model' => 'required|max:255',
+            'quantity' => 'required|integer',
+            'price' => 'required|numeric',
+            'description' => 'nullable',
+        ]);
+
+        $product->update($request->all());
+
+        return redirect()->route('products.index')->with('success', 'Producto actualizado exitosamente.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function destroy(Product $product)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $product->delete();
+        return redirect()->route('products.index')->with('success', 'Producto eliminado exitosamente.');
     }
 }
