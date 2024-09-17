@@ -15,11 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
 
-Route::post('/reset_pass', 'App\Http\Controllers\Auth\ChangePasswordController@reset')->name('reset_pass');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/reset_pass', 'App\Http\Controllers\Auth\ChangePasswordController@reset')->name('reset_pass');
+    Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+});
 
 Auth::routes();
